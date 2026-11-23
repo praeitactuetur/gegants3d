@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>GEGANTERS 3D — La Cercavila (Edició Realista)</title>
+  <link rel="stylesheet" href="./src/styles/main.css" />
+</head>
+<body>
+  <canvas id="game-canvas"></canvas>
+
+  <div id="studio-overlay" class="overlay active">
+    <header class="studio-header">
+      <div class="brand">
+        <span class="badge">EDICIÓ REALISTA 3D · WEBGL PBR</span>
+        <h1>GEGANTERS <span>LA CERCAVILA</span></h1>
+        <p id="studio-subtitle">Arrossega el ratolí o el dit per girar 360° al voltant del geganter i del gegant</p>
+      </div>
+      <div class="header-actions">
+        <button id="btn-randomize" class="btn-secondary" title="Generar aspecte aleatori">🎲 Aleatori</button>
+        <button id="btn-toggle-skirt-preview" class="btn-secondary">👁️ Mirar sota faldilles</button>
+      </div>
+    </header>
+
+    <aside class="studio-panel">
+      <nav class="studio-tabs">
+        <button class="tab-btn active" data-tab="tab-colla">1. Poble i Gegant</button>
+        <button class="tab-btn" data-tab="tab-cos">2. Geganter/a</button>
+        <button class="tab-btn" data-tab="tab-roba">3. Indumentària</button>
+      </nav>
+
+      <div id="tab-colla" class="tab-content active">
+        <div class="control-group">
+          <label>Poble / Escenari 3D</label>
+          <div class="card-grid" id="town-selector">
+            <button class="choice-card active" data-town="collbato">
+              <strong>Collbató</strong>
+              <span>Plaça de l'Església · Montserrat</span>
+            </button>
+            <button class="choice-card" data-town="vilafranca">
+              <strong>Vilafranca</strong>
+              <span>Plaça de la Vila · Gòtic</span>
+            </button>
+            <button class="choice-card" data-town="berga">
+              <strong>Berga</strong>
+              <span>Plaça de Sant Pere · Patum</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>Colla i Figura Gegantera</label>
+          <div class="card-grid two-cols" id="giant-selector">
+            <button class="choice-card active" data-giant="mansuet">
+              <strong>En Mansuet</strong>
+              <span>Collbató · 4,10 m · 58 kg</span>
+            </button>
+            <button class="choice-card" data-giant="marta">
+              <strong>La Marta</strong>
+              <span>Collbató · 3,95 m · 52 kg</span>
+            </button>
+            <button class="choice-card" data-giant="ferragus">
+              <strong>Ferragús</strong>
+              <span>Vilafranca · 4,20 m · 62 kg</span>
+            </button>
+            <button class="choice-card" data-giant="elisenda">
+              <strong>Elisenda</strong>
+              <span>Vilafranca · 4,00 m · 54 kg</span>
+            </button>
+            <button class="choice-card" data-giant="vell">
+              <strong>Gegant Vell</strong>
+              <span>Berga · 4,15 m · 60 kg</span>
+            </button>
+            <button class="choice-card" data-giant="geganta">
+              <strong>Geganta</strong>
+              <span>Berga · 3,95 m · 53 kg</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>Qualitat Gràfica</label>
+          <div class="pill-row" id="quality-selector">
+            <button class="pill" data-quality="medium">Fluïda (Mòbil)</button>
+            <button class="pill active" data-quality="high">Alta (PBR + Ombres)</button>
+            <button class="pill" data-quality="ultra">Ultra (SSAO + Bloom)</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-cos" class="tab-content">
+        <div class="control-group">
+          <label>Sexe</label>
+          <div class="pill-row" id="gender-selector">
+            <button class="pill active" data-val="male">Geganter (Home)</button>
+            <button class="pill" data-val="female">Gegantera (Dona)</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>Complexió Física (afecta força i agilitat)</label>
+          <div class="pill-row" id="build-selector">
+            <button class="pill" data-val="agile">Àgil</button>
+            <button class="pill active" data-val="athletic">Atlètica</button>
+            <button class="pill" data-val="strong">Forta</button>
+            <button class="pill" data-val="robust">Robusta</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>To de Pell</label>
+          <div class="swatch-row" id="skin-selector">
+            <button class="swatch active" data-val="#f5cbb0" style="background:#f5cbb0"></button>
+            <button class="swatch" data-val="#eab696" style="background:#eab696"></button>
+            <button class="swatch" data-val="#d69a74" style="background:#d69a74"></button>
+            <button class="swatch" data-val="#b87852" style="background:#b87852"></button>
+            <button class="swatch" data-val="#8a5436" style="background:#8a5436"></button>
+            <button class="swatch" data-val="#573320" style="background:#573320"></button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>Pentinat</label>
+          <div class="pill-row" id="hair-selector">
+            <button class="pill active" data-val="short">Curt Clàssic</button>
+            <button class="pill" data-val="curly">Arrissat</button>
+            <button class="pill" data-val="bun">Monyo / Recollit</button>
+            <button class="pill" data-val="long">Cabell Llarg</button>
+            <button class="pill" data-val="bald">Rapat / Calb</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>Color de Cabell i Barba</label>
+          <div class="swatch-row" id="haircolor-selector">
+            <button class="swatch active" data-val="#1e1815" style="background:#1e1815"></button>
+            <button class="swatch" data-val="#4a3020" style="background:#4a3020"></button>
+            <button class="swatch" data-val="#7c5233" style="background:#7c5233"></button>
+            <button class="swatch" data-val="#c79b52" style="background:#c79b52"></button>
+            <button class="swatch" data-val="#9e3b24" style="background:#9e3b24"></button>
+            <button class="swatch" data-val="#8d949c" style="background:#8d949c"></button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>Barba / Bigoti</label>
+          <div class="pill-row" id="beard-selector">
+            <button class="pill active" data-val="none">Sense</button>
+            <button class="pill" data-val="stubble">Barba de 3 dies</button>
+            <button class="pill" data-val="full">Barba Poblada</button>
+            <button class="pill" data-val="mustache">Bigoti Geganter</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-roba" class="tab-content">
+        <div class="control-group">
+          <label>Camisa de la Colla</label>
+          <div class="pill-row" id="shirt-selector">
+            <button class="pill active" data-val="#f7f5f0">Blanca Tradicional</button>
+            <button class="pill" data-val="#1d4ed8">Blau Collbató</button>
+            <button class="pill" data-val="#991b1b">Grana Festiu</button>
+            <button class="pill" data-val="#15803d">Verd Vilafranca</button>
+            <button class="pill" data-val="#1f2937">Negra Gala</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>Color de la Faixa</label>
+          <div class="swatch-row" id="faixa-selector">
+            <button class="swatch active" data-val="#b91c1c" style="background:#b91c1c" title="Vermella"></button>
+            <button class="swatch" data-val="#111827" style="background:#111827" title="Negra"></button>
+            <button class="swatch" data-val="#1e3a8a" style="background:#1e3a8a" title="Blava"></button>
+            <button class="swatch" data-val="#6b21a8" style="background:#6b21a8" title="Morada"></button>
+            <button class="swatch" data-val="#d97706" style="background:#d97706" title="Daurada"></button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>Mocador de Coll</label>
+          <div class="pill-row" id="scarf-selector">
+            <button class="pill active" data-val="red-dots">Vermell de Punts</button>
+            <button class="pill" data-val="blue-dots">Blau de Punts</button>
+            <button class="pill" data-val="senyera">Quatribarrat</button>
+            <button class="pill" data-val="none">Sense Mocador</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>Pantalons i Espardenyes</label>
+          <div class="pill-row" id="pants-selector">
+            <button class="pill active" data-val="#18181b">Pantaló Negre + Vetes Vermelles</button>
+            <button class="pill" data-val="#f3f4f6">Pantaló Blanc + Vetes Negres</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="studio-footer">
+        <button id="btn-start-game" class="btn-primary">
+          <span>COMENÇAR LA CERCAVILA</span>
+          <small>Entra a la plaça i aixeca el gegant</small>
+        </button>
+      </div>
+    </aside>
+  </div>
+
+  <div id="game-hud" class="hud hidden">
+    <div class="hud-top">
+      <div class="hud-card status-card">
+        <div class="phase-badge" id="hud-phase">FASE 1 · APROXIMACIÓ</div>
+        <h2 id="hud-objective">Acosta't per darrere d'En Mansuet</h2>
+        <div class="progress-bar-wrap">
+          <div id="hud-progress" class="progress-bar" style="width: 15%"></div>
+        </div>
+      </div>
+
+      <div class="hud-card balance-card">
+        <div class="balance-header">
+          <span>EQUILIBRI DEL GEGANT</span>
+          <span id="hud-tilt-deg">0.0°</span>
+        </div>
+        <div class="balance-meter">
+          <div class="safe-zone"></div>
+          <div id="balance-needle" class="needle"></div>
+        </div>
+        <div class="stats-mini">
+          <span>🌬️ Vent: <strong id="hud-wind">Suau</strong></span>
+          <span>👏 Ambient: <strong id="hud-crowd">85%</strong></span>
+        </div>
+      </div>
+
+      <div class="hud-top-buttons">
+        <button id="btn-camera-mode" class="hud-btn">🎥 Càmera: GTA Darrere</button>
+        <button id="btn-audio-toggle" class="hud-btn">🔊 Gralles: ON</button>
+        <button id="btn-back-studio" class="hud-btn">⚙️ Personalitzar</button>
+      </div>
+    </div>
+
+    <div class="hud-bottom">
+      <div class="action-zone">
+        <button id="btn-main-action" class="action-btn pulse">
+          <span class="action-icon" id="action-icon">🧣</span>
+          <span class="action-label" id="action-label">ENFAIXAR-SE</span>
+          <span class="action-hint" id="action-hint">Mantén premut o prem ESPAI</span>
+        </button>
+      </div>
+
+      <div class="joystick-zone" id="joystick-zone">
+        <div class="joystick-base" id="joystick-base">
+          <div class="joystick-stick" id="joystick-stick"></div>
+        </div>
+        <span class="joystick-tip">Mou-te i compensa el balanceig (o WASD / Fletxes)</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="finish-modal" class="modal hidden">
+    <div class="modal-box">
+      <span class="badge">ACTUACIÓ COMPLETADA!</span>
+      <h2 id="finish-title">Visca la Colla Gegantera!</h2>
+      <p id="finish-desc">Has plantat el gegant amb elegància davant de tota la plaça.</p>
+      <div class="finish-stats">
+        <div><strong id="stat-time">01:24</strong><span>Temps Cercavila</span></div>
+        <div><strong id="stat-stability">96%</strong><span>Estabilitat</span></div>
+        <div><strong id="stat-applause">100%</strong><span>Ovació Públic</span></div>
+      </div>
+      <div class="modal-actions">
+        <button id="btn-replay" class="btn-primary">Tornar a fer la Cercavila</button>
+        <button id="btn-return-studio" class="btn-secondary">Canviar Gegant o Personatge</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
